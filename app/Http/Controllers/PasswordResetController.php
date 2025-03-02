@@ -8,6 +8,46 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class PasswordResetController extends Controller
+
+/**
+ * @OA\Post(
+ *     path="/password/reset",
+ *     summary="Restablecer la contraseña de un usuario",
+ *     description="Permite a un usuario restablecer su contraseña proporcionando su correo electrónico y la nueva contraseña.",
+ *     tags={"Recuperación de contraseña"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"email", "password", "password_confirmation"},
+ *             @OA\Property(property="email", type="string", format="email", example="usuario@example.com"),
+ *             @OA\Property(property="password", type="string", format="password", example="NuevaContraseña123"),
+ *             @OA\Property(property="password_confirmation", type="string", format="password", example="NuevaContraseña123")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Contraseña actualizada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Contraseña actualizada exitosamente.")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="error", type="object", example={"email": {"El campo email es obligatorio."}, "password": {"El campo password es obligatorio."}})
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Usuario no encontrado",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="error", type="string", example="Usuario no encontrado.")
+ *         )
+ *     )
+ * )
+ */
+
 {
     public function resetPassword(Request $request)
     {
