@@ -11,6 +11,35 @@ class GastosController extends Controller
 {
 
     //LISTAR TODOS LOS GASTOS DEL USUARIO
+    /**
+     * @OA\Get(
+     *     path="/gastos/lista",
+     *     summary="Obtener lista de gastos del usuario autenticado",
+     *     tags={"Gastos"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de gastos obtenida con éxito",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Listado de gastos obtenido exitosamente"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="id_users", type="integer", example=1),
+     *                     @OA\Property(property="id_categoria", type="integer", example=1),
+     *                     @OA\Property(property="fecha", type="string", format="date", example="2025-01-19"),
+     *                     @OA\Property(property="monto", type="number", format="float", example=5000.00),
+     *                     @OA\Property(property="descripcion", type="string", example="Hola, esto es una descripción"),
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function indexApi()
     {
         //OBTENER LOS GASTOS DEL USUARIO AUTENTICADO
@@ -46,6 +75,25 @@ class GastosController extends Controller
     }
 
     //CREA UN GASTO
+    /**
+     * @OA\Post(
+     *     path="/gastos/guardar",
+     *     summary="Crear un nuevo gasto",
+     *     tags={"Gastos"},
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"id_categoria","fecha","monto","descripcion"},
+     *             @OA\Property(property="id_categoria", type="integer", example=1),
+     *             @OA\Property(property="fecha", type="string", format="date", example="2025-01-19"),
+     *             @OA\Property(property="monto", type="number", format="float", example=5000.00),
+     *             @OA\Property(property="descripcion", type="string", example="Descripción del gasto")
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Gasto creado exitosamente")
+     * )
+     */
     public function createApi(Request $request)
     {
         //CREA AL NUEVO USUARIO
@@ -65,8 +113,49 @@ class GastosController extends Controller
         return response()->json(['message' => 'Gasto creado exitosamente', 'data' => $gasto], 201);
     }
 
-
     //ACTUALIZA UN GASTO
+    /**
+     * @OA\Put(
+     *     path="/gastos/editar/{id}",
+     *     summary="Actualizar un gasto existente",
+     *     tags={"Gastos"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID del gasto a actualizar",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"id_categoria","fecha","monto","descripcion"},
+     *             @OA\Property(property="id_categoria", type="integer", example=1),
+     *             @OA\Property(property="fecha", type="string", format="date", example="2025-01-19"),
+     *             @OA\Property(property="monto", type="number", format="float", example=4500.00),
+     *             @OA\Property(property="descripcion", type="string", example="Gasto actualizado correctamente")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Gasto actualizado con éxito",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Gasto actualizado con éxito"),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="id_users", type="integer", example=1),
+     *                 @OA\Property(property="id_categoria", type="integer", example=1),
+     *                 @OA\Property(property="fecha", type="string", format="date", example="2025-01-19"),
+     *                 @OA\Property(property="monto", type="number", format="float", example=4500.00),
+     *                 @OA\Property(property="descripcion", type="string", example="Gasto actualizado correctamente"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Gasto no encontrado")
+     * )
+     */
     public function editApi(Request $request, $id)
     {
         //BUSCA EL GASTO POR ID
@@ -92,6 +181,23 @@ class GastosController extends Controller
     }
 
     //ELIMINAR UN GASTO
+    /**
+     * @OA\Delete(
+     *     path="/gastos/eliminar/{id}",
+     *     summary="Eliminar un gasto",
+     *     tags={"Gastos"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID del gasto a eliminar",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Gasto eliminado exitosamente"),
+     *     @OA\Response(response=404, description="Gasto no encontrado")
+     * )
+     */
     public function eliminarApi($id)
     {
         //BUSCAR EL GASTO POR ID

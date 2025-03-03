@@ -1,0 +1,708 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Gestión de Gastos",
+        "description": "Documentación de la API para el manejo de la aplicación de gastos personales",
+        "contact": {
+            "name": "Save Money - GastosApp",
+            "email": "savemoney@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "paths": {
+        "/categorias/lista": {
+            "get": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Obtener lista de categorías",
+                "operationId": "d0c1acf3bc616bda333c1fb6f60b8063",
+                "responses": {
+                    "200": {
+                        "description": "Lista de categorías obtenida con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Listado de categorías obtenido exitosamente"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "nombre": {
+                                                        "type": "string",
+                                                        "example": "Tecnología"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 5
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/categorias/guardar": {
+            "post": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Crear una nueva categoría",
+                "operationId": "ca94c44141e605df88ff78c4510afda1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Alimentos"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Categoría creada exitosamente"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/categorias/editar/{id}": {
+            "put": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Actualizar una categoría",
+                "operationId": "0d0b1eb5159fb0a23ec78273019f7225",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la categoría a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Bebidas"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Categoría actualizada correctamente"
+                    },
+                    "404": {
+                        "description": "Categoría no encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/categorias/eliminar/{id}": {
+            "delete": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Eliminar una categoría",
+                "operationId": "c14599fa1e8d25cf01bb64a354c38e7c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la categoría a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoría eliminada exitosamente"
+                    },
+                    "404": {
+                        "description": "Categoría no encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/gastos/lista": {
+            "get": {
+                "tags": [
+                    "Gastos"
+                ],
+                "summary": "Obtener lista de gastos del usuario autenticado",
+                "operationId": "8a8380ae5d860e0685fedae942e7a1f1",
+                "responses": {
+                    "200": {
+                        "description": "Lista de gastos obtenida con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Listado de gastos obtenido exitosamente"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "id_users": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "id_categoria": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "fecha": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2025-01-19"
+                                                    },
+                                                    "monto": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 5000
+                                                    },
+                                                    "descripcion": {
+                                                        "type": "string",
+                                                        "example": "Hola, esto es una descripción"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/gastos/guardar": {
+            "post": {
+                "tags": [
+                    "Gastos"
+                ],
+                "summary": "Crear un nuevo gasto",
+                "operationId": "2fb734f89a64e0035755cc7e659fedeb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_categoria",
+                                    "fecha",
+                                    "monto",
+                                    "descripcion"
+                                ],
+                                "properties": {
+                                    "id_categoria": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "fecha": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-01-19"
+                                    },
+                                    "monto": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 5000
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Descripción del gasto"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Gasto creado exitosamente"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/gastos/editar/{id}": {
+            "put": {
+                "tags": [
+                    "Gastos"
+                ],
+                "summary": "Actualizar un gasto existente",
+                "operationId": "99696f7f4724a66eb51c3e014e2757da",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del gasto a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_categoria",
+                                    "fecha",
+                                    "monto",
+                                    "descripcion"
+                                ],
+                                "properties": {
+                                    "id_categoria": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "fecha": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-01-19"
+                                    },
+                                    "monto": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 4500
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Gasto actualizado correctamente"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Gasto actualizado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Gasto actualizado con éxito"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "id_users": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "id_categoria": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "fecha": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2025-01-19"
+                                                },
+                                                "monto": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 4500
+                                                },
+                                                "descripcion": {
+                                                    "type": "string",
+                                                    "example": "Gasto actualizado correctamente"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Gasto no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/gastos/eliminar/{id}": {
+            "delete": {
+                "tags": [
+                    "Gastos"
+                ],
+                "summary": "Eliminar un gasto",
+                "operationId": "85ede5331b2314364673552df5bc170a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del gasto a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Gasto eliminado exitosamente"
+                    },
+                    "404": {
+                        "description": "Gasto no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Inicio de sesión"
+                ],
+                "summary": "Iniciar sesión",
+                "description": "Permite a un usuario autenticarse con su email y contraseña. Devuelve un token en caso de éxito.",
+                "operationId": "8c9171aa4b6d6de1d727cb86fc3131f1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "usuario@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "MiContraseña123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inicio de sesión exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "acceso": {
+                                            "type": "string",
+                                            "example": "Ok"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        },
+                                        "idUsuario": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nombreUsuario": {
+                                            "type": "string",
+                                            "example": "Juan Pérez"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "acceso": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No existe el usuario o la contraseña es incorrecta"
+                                        },
+                                        "idUsuario": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "nombreUsuario": {
+                                            "type": "string",
+                                            "example": ""
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/password/reset": {
+            "post": {
+                "tags": [
+                    "Recuperación de contraseña"
+                ],
+                "summary": "Restablecer la contraseña de un usuario",
+                "description": "Permite a un usuario restablecer su contraseña proporcionando su correo electrónico y la nueva contraseña.",
+                "operationId": "fe0f7f1ea12740d543456d2e226ea7f4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "usuario@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "NuevaContraseña123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "NuevaContraseña123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Contraseña actualizada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Contraseña actualizada exitosamente."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "example": {
+                                                "email": [
+                                                    "El campo email es obligatorio."
+                                                ],
+                                                "password": [
+                                                    "El campo password es obligatorio."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Usuario no encontrado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Categorias",
+            "description": "Categorias"
+        },
+        {
+            "name": "Gastos",
+            "description": "Gastos"
+        },
+        {
+            "name": "Inicio de sesión",
+            "description": "Inicio de sesión"
+        },
+        {
+            "name": "Recuperación de contraseña",
+            "description": "Recuperación de contraseña"
+        }
+    ]
+}
